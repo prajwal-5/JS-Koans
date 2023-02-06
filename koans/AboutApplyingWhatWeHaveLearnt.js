@@ -41,13 +41,9 @@ describe("About Applying What We Have Learnt", function() {
 
       /* solve using filter() & all() / any() */
       var checkMushrooms = function(ingredients) { 
-          for (let ingredient = 0; ingredient < ingredients.length; ingredient++) {
-          const currentIngredient = ingredients[ingredient];
-          if(currentIngredient == 'mushrooms') return false;
-        }
-        return true;
+          return _(ingredients).all((ingredient) => {return ingredient !== 'mushrooms'; });
       }
-      productsICanEat = products.filter(pizza => pizza.containsNuts == false && checkMushrooms(pizza.ingredients));
+      productsICanEat = products.filter(pizza => !pizza.containsNuts && checkMushrooms(pizza.ingredients));
 
       expect(productsICanEat.length).toBe(1);
   });
@@ -92,11 +88,10 @@ describe("About Applying What We Have Learnt", function() {
   it("should count the ingredient occurrence (functional)", function () {
     var ingredientCount = { "{ingredient name}": 0 };
 
-    /* chain() together map(), flatten() and reduce() */
-    ingredientCount = _(products).chain().map(function(pizza) { return [pizza.ingredients];} ).flatten().reduce(function(ingredientCount, item) {
+    ingredientCount = products.map(function(pizza) { return pizza.ingredients; }).flat().reduce(function(ingredientCount, item) {
       ingredientCount[item] = (ingredientCount[item] || 0) + 1;
       return ingredientCount;
-    }, {})._wrapped;
+    }, {});
 
     expect(ingredientCount['mushrooms']).toBe(2);
   });
